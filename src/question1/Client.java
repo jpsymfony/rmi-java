@@ -1,9 +1,18 @@
 package question1;
 
-import java.rmi.*;
+import java.rmi.Naming;
+import java.rmi.RMISecurityManager;
 
+/**
+ * The type Client.
+ */
 public class Client
 {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args)
     {
         System.setSecurityManager(new RMISecurityManager());

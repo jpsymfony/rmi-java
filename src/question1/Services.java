@@ -4,6 +4,9 @@ import java.util.Properties;
 import java.util.Calendar;
 import java.text.DateFormat;
 
+/**
+ * The type Services.
+ */
 public class Services implements Informations
 {
     public String getDate() throws Exception

@@ -7,6 +7,9 @@ import question2.RemoteObservableIF;
 import java.rmi.registry.*;
 import java.util.Properties;
 
+/**
+ * The type Tests rmi.
+ */
 public class Tests_RMI extends junit.framework.TestCase
 {
     protected void setUp()
@@ -16,6 +19,9 @@ public class Tests_RMI extends junit.framework.TestCase
         System.setProperties(p);
     }
 
+    /**
+     * Test observable observer.
+     */
     public void test_observable_observer()
     {
         Registry registry = null;
@@ -35,7 +41,6 @@ public class Tests_RMI extends junit.framework.TestCase
         }
 
         // installation d'un "observateur" aupres de cet "observable"
-
         try {
             obsl = new Observer("obs1", observable, registry);
             registry.rebind("obs1", obsl);

@@ -1,5 +1,8 @@
 package question1;
 
+/**
+ * The type Services test.
+ */
 public class ServicesTest extends junit.framework.TestCase
 {
     protected void setUp() throws java.lang.Exception
@@ -12,6 +15,11 @@ public class ServicesTest extends junit.framework.TestCase
 
     }
 
+    /**
+     * Test 1.
+     *
+     * @throws Exception the exception
+     */
     public void test1() throws java.lang.Exception
     {
         question1.Services s = new question1.Services();

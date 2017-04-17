@@ -7,111 +7,113 @@ import java.net.*;
 import java.util.*;
 
 /**
- * Server, which is capable of performing 
+ * Server, which is capable of performing
  * the <code>GET</code> command. Compared to {@link SimpleHttp}
  * some improvements are found. For instance, the error- and
  * status codes are set correctly. The Content-Type is set,
  * if a file <code>mime.types</code> is located in the current
  * directory. It should conform the following format:
  * <xmp>
- *	.ra=audio/x-realaudio
- *	.wav=audio/x-wav
- *	.gif=image/gif
- *	.jpeg=image/jpeg
- *	.jpg=image/jpeg
- *	.png=image/png
- *	.tiff=image/tiff
- *	.html=text/html
- *	.htm=text/html
- *	.txt=text/plain
+ * .ra=audio/x-realaudio
+ * .wav=audio/x-wav
+ * .gif=image/gif
+ * .jpeg=image/jpeg
+ * .jpg=image/jpeg
+ * .png=image/png
+ * .tiff=image/tiff
+ * .html=text/html
+ * .htm=text/html
+ * .txt=text/plain
  * </xmp>
  *
  * @author Hendrik Schreiber, Peter Rossbach
- * @version $Id: SimpleHttpd2.java,v 1.7 2000/07/15 12:23:39 Hendrik Exp $
+ * @version $Id : SimpleHttpd2.java,v 1.7 2000/07/15 12:23:39 Hendrik Exp $
  * @see OneShotHttpd
  * @see SimpleHttpd
  */
-public class ServeurWeb8086 extends Thread 
+public class ServeurWeb8086 extends Thread
 {
-   /**
-    * Version
-    */
-   public static String vcid = "$Id: SimpleHttpd2.java,v 1.7 2000/07/15 12:23:39 Hendrik Exp $";
+    /**
+     * Version
+     */
+    public static String vcid = "$Id: SimpleHttpd2.java,v 1.7 2000/07/15 12:23:39 Hendrik Exp $";
 
-   /**
-    * Socket of a request.
-    */
-   protected Socket s = null;
+    /**
+     * Socket of a request.
+     */
+    protected Socket s = null;
 
-   /**
-    * Document root.
-    */
-   protected static File docRoot;
+    /**
+     * Document root.
+     */
+    protected static File docRoot;
 
-   /**
-    * Canonical document root.
-    */
-   protected static String canonicalDocRoot;
+    /**
+     * Canonical document root.
+     */
+    protected static String canonicalDocRoot;
 
-   /**
-    * The port the server will listen to
-    */
-   public final static int HTTP_PORT = 8086;
+    /**
+     * The port the server will listen to
+     */
+    public final static int HTTP_PORT = 8086;
 
-   /**
-    * CRLF
-    */
-   public final static String CRLF = "\r\n";
+    /**
+     * CRLF
+     */
+    public final static String CRLF = "\r\n";
 
-   /**
-    * Protocol out server understands.
-    */
-   public final static String PROTOCOL = "HTTP/1.0 ";
+    /**
+     * Protocol out server understands.
+     */
+    public final static String PROTOCOL = "HTTP/1.0 ";
 
-   /**
-    * Status code: All OK.
-    */
-   public final static String SC_OK = "200 OK";
+    /**
+     * Status code: All OK.
+     */
+    public final static String SC_OK = "200 OK";
 
-   /**
-    * Status code: Bad request.
-    */
-   public final static String SC_BAD_REQUEST = "400 Bad Request";
+    /**
+     * Status code: Bad request.
+     */
+    public final static String SC_BAD_REQUEST = "400 Bad Request";
 
-   /**
-    * Status code: Forbidden request.
-    */
-   public final static String SC_FORBIDDEN = "403 Forbidden";
+    /**
+     * Status code: Forbidden request.
+     */
+    public final static String SC_FORBIDDEN = "403 Forbidden";
 
-   /**
-    * Status code: Resource not found.
-    */
-   public final static String SC_NOT_FOUND = "404 Not Found";
+    /**
+     * Status code: Resource not found.
+     */
+    public final static String SC_NOT_FOUND = "404 Not Found";
 
-   /**
-    * Content type map.
-    */
-   protected static Properties typeMap = new Properties();
+    /**
+     * Content type map.
+     */
+    protected static Properties typeMap = new Properties();
 
-   /**
-    * Current status code.
-    */
-   protected String statusCode = SC_OK;
+    /**
+     * Current status code.
+     */
+    protected String statusCode = SC_OK;
 
-   /**
-    * Current header.
-    */
-   protected Hashtable myHeaders = new Hashtable();
+    /**
+     * Current header.
+     */
+    protected Hashtable myHeaders = new Hashtable();
 
-   /**
-    * Waits for an <code>GET</code> request and performs it.
-    * Objects are searched for relatively to the current directory
-    * (Document root = "./"). If no file is specified, only
-    * a directory, the file <code>index.html</code> is delivered.<br>
-    * If the request is not a <code>GET</code> request, the error
-    * message 400, <code>Bad Request</code>, is sent to the client.
-    */
-   public static void main(String argv[])
+    /**
+     * Waits for an <code>GET</code> request and performs it.
+     * Objects are searched for relatively to the current directory
+     * (Document root = "./"). If no file is specified, only
+     * a directory, the file <code>index.html</code> is delivered.<br>
+     * If the request is not a <code>GET</code> request, the error
+     * message 400, <code>Bad Request</code>, is sent to the client.
+     *
+     * @param argv the argv
+     */
+    public static void main(String argv[])
    {
       try
       {
@@ -131,12 +133,12 @@ public class ServeurWeb8086 extends Thread
       }
    }
 
-   /**
-    * Sets the socket of this request and starts the thread.
-    *
-    * @param s Socket of a request
-    */
-   public ServeurWeb8086(Socket s)
+    /**
+     * Sets the socket of this request and starts the thread.
+     *
+     * @param s Socket of a request
+     */
+    public ServeurWeb8086(Socket s)
    {
       this.s = s;
       start();
@@ -181,18 +183,18 @@ public class ServeurWeb8086 extends Thread
       }
    }
 
-   /**
-    * Reads the file, specified in <code>request</code> and writes it to
-    * the OutputStream.<br>
-    * If the file could not be found, the error message 404,
-    * <code>Not Found</code>, is returned.
-    *
-    * @exception IOException in case writing to the <code>DataOutputStream</code>
-    *    fails.
-    * @param os Stream, where the requested object is to be copied to.
-    * @param file file to copy.
-    */
-   protected void sendDocument(DataOutputStream os, File file) throws IOException
+    /**
+     * Reads the file, specified in <code>request</code> and writes it to
+     * the OutputStream.<br>
+     * If the file could not be found, the error message 404,
+     * <code>Not Found</code>, is returned.
+     *
+     * @param os   Stream, where the requested object is to be copied to.
+     * @param file file to copy.
+     * @throws IOException the io exception
+     * @throws IOException in case writing to the <code>DataOutputStream</code>    fails.
+     */
+    protected void sendDocument(DataOutputStream os, File file) throws IOException
    {
       try
       {
@@ -216,55 +218,57 @@ public class ServeurWeb8086 extends Thread
       }
    }
 
-   /**
-    * Sets a status code.
-    *
-    * @param statusCode status code
-    */
-   protected void setStatusCode(String statusCode)
+    /**
+     * Sets a status code.
+     *
+     * @param statusCode status code
+     */
+    protected void setStatusCode(String statusCode)
    {
       this.statusCode = statusCode;
    }
 
-   /**
-    * Gets the status code.
-    *
-    * @return status code
-    */
-   protected String getStatusCode()
+    /**
+     * Gets the status code.
+     *
+     * @return status code
+     */
+    protected String getStatusCode()
    {
       return statusCode;
    }
 
-   /**
-    * Writes the status line to the consigned <code>DataOutputStream</code>.
-    *
-    * @param out DataOutputStream where the line is to be written.
-    * @exception IOException in case writing fails.
-    */
-   protected void sendStatusLine(DataOutputStream out) throws IOException
+    /**
+     * Writes the status line to the consigned <code>DataOutputStream</code>.
+     *
+     * @param out DataOutputStream where the line is to be written.
+     * @throws IOException the io exception
+     * @throws IOException in case writing fails.
+     */
+    protected void sendStatusLine(DataOutputStream out) throws IOException
    {
       out.writeBytes(PROTOCOL + getStatusCode() + CRLF);
    }
 
-   /**
-    * Sets an header value.
-    *
-    * @param key key of the header value.
-    * @param value the header value.
-    */
-   protected void setHeader(String key, String value)
+    /**
+     * Sets an header value.
+     *
+     * @param key   key of the header value.
+     * @param value the header value.
+     */
+    protected void setHeader(String key, String value)
    {
       myHeaders.put(key,value);
    }
 
-   /**
-    * Writes the header to the consigned <code>DataOutputStream</code>.
-    *
-    * @param out DataOutputStream where the header is to be written.
-    * @exception IOException in case writing fails.
-    */
-   protected void sendHeader(DataOutputStream out) throws IOException
+    /**
+     * Writes the header to the consigned <code>DataOutputStream</code>.
+     *
+     * @param out DataOutputStream where the header is to be written.
+     * @throws IOException the io exception
+     * @throws IOException in case writing fails.
+     */
+    protected void sendHeader(DataOutputStream out) throws IOException
    {
       String line;
       String key;
@@ -276,14 +280,15 @@ public class ServeurWeb8086 extends Thread
       }
    }
 
-   /**
-    * Writes an error message to the consigned <code>DataOutputStream</code>.
-    *
-    * @param out DataOutputStream where the error message is to be written.
-    * @param statusCode status code.
-    * @exception IOException in case writing fails.
-    */
-   protected void sendError(String statusCode, DataOutputStream out) throws IOException
+    /**
+     * Writes an error message to the consigned <code>DataOutputStream</code>.
+     *
+     * @param statusCode status code.
+     * @param out        DataOutputStream where the error message is to be written.
+     * @throws IOException the io exception
+     * @throws IOException in case writing fails.
+     */
+    protected void sendError(String statusCode, DataOutputStream out) throws IOException
    {
       setStatusCode(statusCode);
       sendStatusLine(out);
@@ -291,15 +296,14 @@ public class ServeurWeb8086 extends Thread
       System.err.println(getStatusCode());
    }
 
-   /**
-    * Surmise the <code>Content-Type</code> of the file by means
-    * of the file extension.
-    *
-    * @param filename file name
-    * @return Content-Type or "unknown/unknown" in case no
-    * 	appropriate type is found.
-    */
-   public String guessType(String filename)
+    /**
+     * Surmise the <code>Content-Type</code> of the file by means
+     * of the file extension.
+     *
+     * @param filename file name
+     * @return Content -Type or "unknown/unknown" in case no 	appropriate type is found.
+     */
+    public String guessType(String filename)
    {
       String type = null;
       int i = filename.lastIndexOf(".");

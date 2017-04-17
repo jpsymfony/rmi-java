@@ -1,28 +1,39 @@
 package question3;
 
-import java.rmi.Naming;
-import java.rmi.Remote;
-import java.rmi.RemoteException;
-import java.rmi.RMISecurityManager;
+import java.io.*;
+import java.rmi.*;
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.registry.Registry;
 
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
-import java.util.Set;
-
+/**
+ * The type Recipient list.
+ */
 public class RecipientListImpl extends UnicastRemoteObject implements RecipientList
 {
     private Map<InputChannel, Channel[]> store;  // une proposition
     private String name;
 
+    /**
+     * Instantiates a new Recipient list.
+     *
+     * @param name the name
+     * @throws RemoteException the remote exception
+     */
     public RecipientListImpl(String name) throws RemoteException
     {
         this.name = name;
         this.store = new HashMap<InputChannel, Channel[]>();
     }
 
+    /**
+     * Instantiates a new Recipient list.
+     *
+     * @param registry the registry
+     * @param name     the name
+     * @throws RemoteException the remote exception
+     */
     public RecipientListImpl(Registry registry, String name) throws RemoteException
     {
         this(name);
@@ -44,6 +55,11 @@ public class RecipientListImpl extends UnicastRemoteObject implements RecipientL
         store.put(source, destinations);
     }
 
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
     public String getName()
     {
         return this.name;
@@ -70,6 +86,12 @@ public class RecipientListImpl extends UnicastRemoteObject implements RecipientL
         private Message message;
         private Channel[] destinations;
 
+        /**
+         * Instantiates a new Router work thread.
+         *
+         * @param message      the message
+         * @param destinations the destinations
+         */
         public RouterWorkThread(Message message, Channel[] destinations)
         {
             this.message = message;
@@ -90,5 +112,4 @@ public class RecipientListImpl extends UnicastRemoteObject implements RecipientL
             }
         }
     }
-
 }

@@ -3,7 +3,7 @@ package question3;
 /**
  * The type Tests recipient list.
  */
-public class TestsRecipientList extends junit.framework.TestCase
+public class TestsRecipientListActivatable extends junit.framework.TestCase
 {
     /**
      * Test en local patron store and forward.
@@ -13,7 +13,7 @@ public class TestsRecipientList extends junit.framework.TestCase
     public void test_en_local_Patron_StoreAndForward() throws Exception
     {
         try {
-            RecipientList recipient = new RecipientListImpl("recipientA");
+            RecipientList recipient = new RecipientListImplActivatable("recipientA");
             Receiver a = new Receiver("A");
             Receiver b = new Receiver("B");
             Receiver c = new Receiver("C");
@@ -55,7 +55,6 @@ public class TestsRecipientList extends junit.framework.TestCase
 
             recipient.sendMessage(msg);
             Thread.sleep(50);
-
             assertTrue(" message bien recu ?", a.getReceived().getMessage().equals("test1"));
             assertTrue(" message bien recu ?", b.getReceived().getMessage().equals("test1"));
             assertTrue(" message bien recu ?", c.getReceived().getMessage().equals("test1"));

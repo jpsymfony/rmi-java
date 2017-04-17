@@ -6,10 +6,19 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 // une implementation du pattern Adaptateur
 
+/**
+ * The type Informations rmi distant.
+ */
 public class InformationsRMIDistant extends UnicastRemoteObject implements InformationsRMI
 {
     private Informations services; // l'adapte
 
+    /**
+     * Instantiates a new Informations rmi distant.
+     *
+     * @param services the services
+     * @throws RemoteException the remote exception
+     */
     public InformationsRMIDistant(Informations services) throws RemoteException
     {
         this.services = services;

@@ -25,6 +25,10 @@ public class Observable extends UnicastRemoteObject implements RemoteObservableI
      * Constructeur.
      *
      * @param registry l'annuaire de noms
+     * @throws RemoteException       the remote exception
+     * @throws UnknownHostException  the unknown host exception
+     * @throws NotBoundException     the not bound exception
+     * @throws MalformedURLException the malformed url exception
      */
     public Observable(Registry registry)
             throws RemoteException,
@@ -38,7 +42,12 @@ public class Observable extends UnicastRemoteObject implements RemoteObservableI
 
     /**
      * Constructeur par defaut
-     * Utilisation ici de la classe Naming soit la configuration par defaut (rmigegistry, port 1099)
+     * Utilisation ici de la classe Naming soit la configuration par defaut (rmiregistry, port 1099)
+     *
+     * @throws RemoteException       the remote exception
+     * @throws UnknownHostException  the unknown host exception
+     * @throws NotBoundException     the not bound exception
+     * @throws MalformedURLException the malformed url exception
      */
     public Observable() throws RemoteException,
             UnknownHostException,
@@ -61,7 +70,6 @@ public class Observable extends UnicastRemoteObject implements RemoteObservableI
       /* a completer */
       observers.add(observer);
     }
-
 
     /**
      * Notification a tous les observateurs inscrits d'un observateur.
